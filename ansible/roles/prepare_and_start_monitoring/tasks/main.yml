@@ -1,0 +1,71 @@
+---
+- name: Ensure directory exists
+  file:
+    path: "{{ docker_compose_monitoring_file_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Template docker-compose file
+  template:
+    src: templates/docker-compose-monitoring.yml.j2
+    dest: "{{ docker_compose_monitoring_file_dir }}/docker-compose.yml"
+    mode: "0700"
+    force: yes
+
+- name: Copy Prometheus config file
+  copy:
+    src: files/prometheus.yml
+    dest: "{{ docker_compose_monitoring_file_dir }}/prometheus.yml"
+    mode: "0644"
+
+- name: Copy Prometheus config file
+  copy:
+    src: files/promtail.yaml
+    dest: "{{ docker_compose_monitoring_file_dir }}/promtail.yml"
+    mode: "0644"
+
+- name: Ensure grafana/provisioning/dashboards directory exists
+  file:
+    path: "{{ docker_compose_monitoring_file_dir }}/grafana/provisioning/dashboards"
+    state: directory
+    mode: "0755"
+
+- name: Ensure grafana/provisioning/datasources directory exists
+  file:
+    path: "{{ docker_compose_monitoring_file_dir }}/grafana/provisioning/datasources"
+    state: directory
+    mode: "0755"
+
+- name: Copy dashboard file
+  copy:
+    src: files/grafana/default.yaml
+    dest: "{{ docker_compose_monitoring_file_dir }}/grafana/provisioning/dashboards/default.yaml"
+    mode: "0644"
+
+- name: Copy dashboard file
+  copy:
+    src: files/grafana/1860_rev37.json
+    dest: "{{ docker_compose_monitoring_file_dir }}/grafana/provisioning/dashboards/16314_rev3.json"
+    mode: "0644"
+
+- name: Copy loki_ds config file
+  copy:
+    src: files/grafana/loki_ds.yml
+    dest: "{{ docker_compose_monitoring_file_dir }}/grafana/provisioning/datasources/loki_ds.yml"
+    mode: "0644"
+
+- name: Copy prometheus_ds config file
+  copy:
+    src: files/grafana/prometheus_ds.yml
+    dest: "{{ docker_compose_monitoring_file_dir }}/grafana/provisioning/datasources/prometheus_ds.yml"
+    mode: "0644"
+
+- name: Run docker-compose.yml file
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_monitoring_file_dir }}"
+    recreate: always
+  register: output
+
+- name: Show results
+  debug:
+    var: output

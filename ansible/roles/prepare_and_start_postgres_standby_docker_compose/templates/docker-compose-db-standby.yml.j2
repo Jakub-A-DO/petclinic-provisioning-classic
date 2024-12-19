@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: {{ docker_compose_postgres_image }}
+    container_name: postgres-standby
+    user: postgres
+    ports:
+      - "{{ docker_compose_postgres_external_port }}:{{ docker_compose_postgres_internal_port }}"
+    env_file:
+      - ./postgres.env
+    volumes:
+      - {{ docker_compose_postgres_volume_name }}:/var/lib/postgresql/data
+      - ./shared:/shared
+
+    entrypoint: ["bash", "/shared/standby-entrypoint.sh"]
+
+volumes:
+  {{ docker_compose_postgres_volume_name }}:

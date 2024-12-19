@@ -1,0 +1,32 @@
+---
+- name: Install docker
+  hosts: webservers-dev
+  become: true
+  roles:
+    - prepare_docker
+
+- name: Prepare compose file
+  hosts: docker_compose
+  become: true
+  roles:
+    - prepare_docker_compose_file
+
+- name: Prepare docker services
+  hosts: docker_services
+  become: true
+  roles:
+    - prepare_docker_services
+#    - nginx
+#    - node_exporter
+# - name: Configure Web Servers
+#   hosts: webservers
+#   become: true
+#   roles:
+#     - nginx
+#     - node_exporter
+
+# - name: Configure Monitoring
+#   hosts: monitoring
+#   become: true
+#   roles:
+#     - node_exporter

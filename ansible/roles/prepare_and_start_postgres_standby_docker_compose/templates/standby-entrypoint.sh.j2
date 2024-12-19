@@ -1,0 +1,26 @@
+#!/bin/bash
+set -e
+
+PRIMARY_HOST=${PRIMARY_HOST:-"{{ db_master_ip }}"}
+PRIMARY_PORT=${PRIMARY_PORT:-5432}
+REPLICATOR_USER="replicator"
+REPLICATOR_PASSWORD="replicator_password"
+
+if [ ! -s "$PGDATA/PG_VERSION" ]; then
+  echo "Setting up standby node..."
+
+  rm -rf "$PGDATA"/*
+
+  PGPASSWORD=$REPLICATOR_PASSWORD pg_basebackup -h $PRIMARY_HOST -p $PRIMARY_PORT -U $REPLICATOR_USER -D "$PGDATA" -Fp -Xs -P
+
+  cat > "$PGDATA/postgresql.auto.conf" <<EOF
+primary_conninfo = 'host=$PRIMARY_HOST port=$PRIMARY_PORT user=$REPLICATOR_USER password=$REPLICATOR_PASSWORD'
+recovery_target_timeline = 'latest'
+EOF
+
+  touch "$PGDATA/standby.signal"
+  chown -R postgres:postgres "$PGDATA"
+  chmod 700 "$PGDATA"
+fi
+
+exec postgres

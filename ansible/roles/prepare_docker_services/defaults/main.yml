@@ -1,0 +1,11 @@
+nginx_container_docker_options: "--rm --network=host"
+nginx_container_name: "nginx"
+nginx_docker_image: "nginx:1.24"
+
+node_exporter_docker_image: "prom/node-exporter:v1.8.2"
+node_exporter_container_name: "node-exporter"
+node_exporter_docker_options: "--rm --network=host"
+
+path_to_systemd_services: "/etc/systemd/system/"
+nginx_service_name: "nginx.service"
+node_exporter_service_name: "node-exporter.service"

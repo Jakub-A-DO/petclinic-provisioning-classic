@@ -1,0 +1,36 @@
+%{ for instance in instances ~}
+${instance.name} ansible_host=${instance.ip} ansible_user=bsc-node ansible_ssh_private_key_file=~/.ssh/id_rsa
+%{ endfor ~}
+%{ for instance in db_instances ~}
+${instance.name} ansible_host=${instance.ip} ansible_user=bsc-node ansible_ssh_private_key_file=~/.ssh/id_rsa
+%{ endfor ~}
+%{ for instance in monitoring_instances ~}
+${instance.name} ansible_host=${instance.ip} ansible_user=bsc-node ansible_ssh_private_key_file=~/.ssh/id_rsa
+%{ endfor ~}
+
+[all:vars]
+test="true"
+db_master_ip="${db_master_instance[0].private_ip}"
+db_standby_ip="${db_standby_instance[0].private_ip}"
+monitoring_master_private_ip="${monitoring_master_instance[0].private_ip}"
+
+[webservers-dev]
+%{ for instance in instances ~}
+${instance.name}
+%{ endfor ~}
+
+[petclinic]
+%{ for instance in instances ~}
+${instance.name}
+%{ endfor ~}
+
+[petclinic-db-master]
+${db_master_instance[0].name}
+
+[petclinic-db-standby]
+${db_standby_instance[0].name}
+
+[petclinic-monitoring]
+%{ for instance in monitoring_instances ~}
+${instance.name}
+%{ endfor ~}

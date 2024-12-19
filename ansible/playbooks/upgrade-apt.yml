@@ -1,0 +1,12 @@
+---
+- name: Upgrade all packages
+  hosts: all
+  become: true
+  roles:
+    - apt_upgrade
+
+- name: Install java and maven
+  hosts: petclinic
+  become: true
+  roles:
+    - install_java_and_maven

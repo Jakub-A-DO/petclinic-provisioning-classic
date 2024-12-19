@@ -1,0 +1,6 @@
+---
+- name: Download dependencies
+  shell: cd /home/bsc-node/petclinic && mvn package -Dmaven.test.skip=true
+
+- name: Build container 
+  shell: "cd /home/bsc-node/petclinic && mvn spring-boot:build-image -Dspring-boot.build-image.imageName=petclinic-ansible:{{ petclinic_image_version }} -Dmaven.test.skip=true"

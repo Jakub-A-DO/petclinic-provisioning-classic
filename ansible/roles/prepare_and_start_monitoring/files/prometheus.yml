@@ -1,0 +1,73 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: "cloud-node_exporter"
+    honor_labels: true
+    gce_sd_configs:
+      - project: "petclinic-444616"
+        port: 9100
+        zone:
+          "europe-central2-c"
+          #filters: 'status="RUNNING"'
+        refresh_interval: 5s
+      - project: "petclinic-444616"
+        port: 9100
+        zone:
+          "europe-central2-b"
+          #filters: 'status="RUNNING"'
+        refresh_interval: 5s
+      - project: "petclinic-444616"
+        port: 9100
+        zone:
+          "europe-central2-a"
+          #filters: 'status="RUNNING"'
+        refresh_interval: 5s
+    relabel_configs:
+      - source_labels: ["__meta_gce_private_ip"] # Use private IP for relabeling
+        regex: (.*)
+        replacement: "${1}:9100" # Append port 80 to the private IP address
+        target_label: "__address__" # This tells Prometheus the target to scrape
+      - source_labels: ["__meta_gce_instance_name"]
+        target_label: "name"
+
+  - job_name: "cloud-cadvisor"
+    honor_labels: true
+    gce_sd_configs:
+      - project: "petclinic-444616"
+        port: 8050
+        zone:
+          "europe-central2-c"
+          #filters: 'status="RUNNING"'
+        refresh_interval: 5s
+      - project: "petclinic-444616"
+        port: 8050
+        zone:
+          "europe-central2-b"
+          #filters: 'status="RUNNING"'
+        refresh_interval: 5s
+      - project: "petclinic-444616"
+        port: 8050
+        zone:
+          "europe-central2-a"
+          #filters: 'status="RUNNING"'
+        refresh_interval: 5s
+    relabel_configs:
+      - source_labels: ["__meta_gce_private_ip"] # Use private IP for relabeling
+        regex: (.*)
+        replacement: "${1}:8050" # Append port 80 to the private IP address
+        target_label: "__address__" # This tells Prometheus the target to scrape
+      - source_labels: ["__meta_gce_instance_name"]
+        target_label: "name"
+
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: "loki"
+    static_configs:
+      - targets: ["loki:3100"]
+
+  - job_name: "promtail"
+    static_configs:
+      - targets: ["promtail:9080"]

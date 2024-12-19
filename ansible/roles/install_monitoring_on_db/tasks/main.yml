@@ -1,0 +1,29 @@
+---
+- name: Ensure directory exists
+  file:
+    path: "{{ docker_compose_monitoring_file_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Template docker-compose file
+  template:
+    src: templates/docker-compose-monitoring.yml.j2
+    dest: "{{ docker_compose_monitoring_file_dir }}/docker-compose.yml"
+    mode: "0700"
+    force: yes
+
+- name: Template promtail_config.yaml file
+  template:
+    src: templates/promtail_config.yaml.j2
+    dest: "{{ docker_compose_monitoring_file_dir }}/promtail_config.yaml"
+    mode: "0700"
+    force: yes
+
+- name: Run docker-compose.yml file
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_monitoring_file_dir }}"
+  register: output
+
+- name: Show results
+  debug:
+    var: output

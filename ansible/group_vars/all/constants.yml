@@ -1,0 +1,13 @@
+docker_compose_file_dir: "/home/{{ ansible_user }}/petclinic/docker-compose"
+env_postgres_pass: "petclinic"
+env_postgres_user: "petclinic"
+env_postgres_db: "petclinic"
+docker_compose_postgres_server_ip: "{{ db_ip_0 }}"
+docker_compose_monitoring_file_dir: "/home/{{ ansible_user }}/petclinic/monitoring"
+
+docker_compose_prometheus_image: prom/prometheus:v3.0.1
+docker_compose_grafana_image: grafana/grafana:11.4.0
+docker_compose_loki_image: grafana/loki:3.2.2
+docker_compose_node_exporter_image: prom/node-exporter:v1.8.2
+docker_compose_promtail_image: grafana/promtail:3.2.2
+docker_compose_cadvisor_image: gcr.io/cadvisor/cadvisor:v0.51.0

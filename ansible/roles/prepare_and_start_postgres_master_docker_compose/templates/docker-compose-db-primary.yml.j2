@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: {{ docker_compose_postgres_image }}
+    container_name: postgres-primary
+    ports:
+      - "{{ docker_compose_postgres_external_port }}:{{ docker_compose_postgres_internal_port }}"
+    env_file:
+      - ./postgres.env
+    volumes:
+      - {{ docker_compose_postgres_volume_name }}:/var/lib/postgresql/data
+      - ./primary-init:/docker-entrypoint-initdb.d
+
+volumes:
+  {{ docker_compose_postgres_volume_name }}:

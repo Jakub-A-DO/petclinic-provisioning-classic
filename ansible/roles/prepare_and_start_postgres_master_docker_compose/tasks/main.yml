@@ -1,0 +1,42 @@
+---
+- name: Ensure directory exists
+  file:
+    path: "{{ docker_compose_file_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Template docker-compose file
+  template:
+    src: templates/docker-compose-db-primary.yml.j2
+    dest: "{{ docker_compose_file_dir }}/docker-compose.yml"
+    mode: "0700"
+    force: yes
+
+- name: Template postgres.env file
+  template:
+    src: templates/postgres.env.j2
+    dest: "{{ docker_compose_file_dir }}/postgres.env"
+    mode: "0700"
+    force: yes
+
+- name: Ensure primary-init directory exists
+  file:
+    path: "{{ docker_compose_file_dir }}/primary-init"
+    state: directory
+    mode: "0755"
+
+- name: Template 01-init-replication.sh file
+  template:
+    src: templates/01-init-replication.sh.j2
+    dest: "{{ docker_compose_file_dir }}/primary-init/01-init-replication.sh"
+    mode: "0755"
+    force: yes
+
+- name: Run docker-compose.yml file
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_file_dir }}"
+  register: output
+
+- name: Show results
+  debug:
+    var: output

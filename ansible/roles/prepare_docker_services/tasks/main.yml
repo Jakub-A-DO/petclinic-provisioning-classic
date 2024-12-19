@@ -1,0 +1,36 @@
+---
+- name: Template nginx service
+  template:
+    src: templates/nginx.service.j2
+    dest: "{{ path_to_systemd_services }}/{{ nginx_service_name }}"
+    mode: "0700"
+    force: yes
+
+- name: Template node-exporter service
+  template:
+    src: templates/node-exporter.service.j2
+    dest: "{{ path_to_systemd_services }}/{{ node_exporter_service_name }}"
+    mode: "0700"
+    force: yes
+
+- name: Start and enable nginx service
+  systemd:
+    name: "{{ nginx_service_name }}"
+    state: started
+    enabled: true
+  register: output
+
+- name: Show results
+  debug:
+    var: output
+
+- name: Start and enable node-exporter service
+  systemd:
+    name: "{{ node_exporter_service_name }}"
+    state: started
+    enabled: true
+  register: output
+
+- name: Show results
+  debug:
+    var: output

@@ -1,0 +1,19 @@
+docker_compose_postgres_image: "postgres:17.0"
+docker_compose_postgres_external_port: "5432"
+docker_compose_postgres_internal_port: "5432"
+docker_compose_postgres_volume_name: "postgres_data"
+docker_compose_postgres_password: "petclinic"
+docker_compose_postgres_user: "petclinic"
+docker_compose_postgres_db: "petclinic"
+
+docker_compose_prometheus_image: prom/prometheus:v3.0.1
+
+docker_compose_grafana_image: grafana/grafana:11.4.0
+
+docker_compose_loki_image: grafana/loki:3.2.2
+
+docker_compose_node_exporter_image: prom/node-exporter:v1.8.2
+
+docker_compose_promtail_image: grafana/promtail:3.2.2
+
+docker_compose_cadvisor_image: gcr.io/cadvisor/cadvisor:v0.51.0

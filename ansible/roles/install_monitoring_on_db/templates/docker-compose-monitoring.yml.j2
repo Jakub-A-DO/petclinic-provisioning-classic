@@ -1,0 +1,32 @@
+services:
+  cadvisor:
+    image: {{ docker_compose_cadvisor_image }}
+    ports:
+      - 8050:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /sys:/sys
+      - /var/lib/docker/:/var/lib/docker/
+    restart: always
+
+  promtail:
+    image: {{ docker_compose_promtail_image }}
+    volumes:
+      - /var/log:/var/log
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./promtail.yml:/etc/promtail/promtail.yaml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    restart: always
+    command:
+      - -config.file=/etc/promtail/promtail.yaml
+
+  node_exporter:
+    image: {{ docker_compose_node_exporter_image }}
+    container_name: node_exporter
+    ports:
+      - "9100:9100"
+    restart: always
+    command:
+      - '--path.rootfs=/host'
+    volumes:
+      - /:/host:ro,rslave

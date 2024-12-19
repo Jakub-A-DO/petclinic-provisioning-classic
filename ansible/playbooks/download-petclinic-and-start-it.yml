@@ -1,0 +1,10 @@
+---
+- name: Download repo
+  hosts: petclinic
+  roles:
+    - download_petclinic_repo
+
+- name: Download petclinic dependency and start app
+  hosts: petclinic
+  roles:
+    - start_petclinic

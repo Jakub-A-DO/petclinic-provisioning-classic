@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+
+# Create a replication user
+psql -U petclinic -c "CREATE ROLE replicator WITH REPLICATION PASSWORD 'replicator_password' LOGIN;"
+
+# Configure PostgreSQL for replication
+echo "wal_level = replica" >> "$PGDATA/postgresql.conf"
+echo "max_wal_senders = 5" >> "$PGDATA/postgresql.conf"
+echo "wal_keep_size = 64MB" >> "$PGDATA/postgresql.conf"
+echo "wal_sender_timeout = 60s" >> "$PGDATA/postgresql.conf"
+echo "listen_addresses = '*'" >> "$PGDATA/postgresql.conf"
+
+# Allow replication connections from the standby server
+echo "host replication replicator {{ db_standby_ip }}/32 md5" >> "$PGDATA/pg_hba.conf"

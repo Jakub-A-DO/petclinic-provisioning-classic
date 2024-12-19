@@ -1,0 +1,15 @@
+[Unit]
+Description=Node exporter - docker container
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop {{ nginx_container_name }}
+ExecStartPre=-/usr/bin/docker rm {{ nginx_container_name }}
+ExecStartPre=/usr/bin/docker pull {{ nginx_docker_image }}
+ExecStart=/usr/bin/docker run {{ nginx_container_docker_options }} --name {{ nginx_container_name }} {{ nginx_docker_image }}
+
+[Install]
+WantedBy=multi-user.target

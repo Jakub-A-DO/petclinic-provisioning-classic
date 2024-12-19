@@ -1,0 +1,7 @@
+services:
+  petclinic:
+    image: {{ docker_compose_petclinic_image_name }}:{{ docker_compose_petclinic_image_version }}
+    ports:
+      - "{{ docker_compose_petclinic_external_port }}:{{ docker_compose_petclinic_internal_port }}"
+    env_file:
+      - ./petclinic.env

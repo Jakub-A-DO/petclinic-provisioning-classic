@@ -1,0 +1,15 @@
+[Unit]
+Description=Nginx - docker container
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop {{ node_exporter_container_name }}
+ExecStartPre=-/usr/bin/docker rm {{ node_exporter_container_name }}
+ExecStartPre=/usr/bin/docker pull {{ node_exporter_docker_image }}
+ExecStart=/usr/bin/docker run {{ node_exporter_docker_options }} --name {{ node_exporter_container_name }} {{ node_exporter_docker_image }}
+
+[Install]
+WantedBy=multi-user.target

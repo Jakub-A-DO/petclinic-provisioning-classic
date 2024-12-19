@@ -1,0 +1,28 @@
+services:
+  nginx:
+    image: {{ docker_compose_nginx_image }}
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - {{ nginx_config_file_name }}:/etc/nginx/default.conf
+    networks:
+      - {{ docker_compose_network_name }}
+    restart: {{ docker_compose_restart_policy }}
+    healthcheck:
+      test: ["CMD", "service", "nginx", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  node-exporter:
+    image: {{ docker_compose_node_exporter_image }}
+    ports:
+      - 9100:9100
+    networks:
+      - {{ docker_compose_network_name }}
+    restart: {{ docker_compose_restart_policy }}
+
+networks:
+  {{ docker_compose_network_name }}:

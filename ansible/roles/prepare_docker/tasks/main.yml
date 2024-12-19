@@ -1,0 +1,35 @@
+---
+- name: Preparing GPG key in APT
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Adding docker's repo
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+    state: present
+    install_python_apt: true
+
+- name: Install docker's packages
+  apt:
+    update_cache: yes
+
+- name: Install packages
+  become: true
+  package:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+
+- name: adding existing user "{{ ansible_user }}" to group "docker"
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: yes
+
+- name: Reset connection to apply new group membership
+  meta: reset_connection

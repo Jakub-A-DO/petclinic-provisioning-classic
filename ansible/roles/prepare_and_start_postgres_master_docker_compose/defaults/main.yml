@@ -1,0 +1,7 @@
+docker_compose_postgres_image: "postgres:17.0"
+docker_compose_postgres_external_port: "5432"
+docker_compose_postgres_internal_port: "5432"
+docker_compose_postgres_volume_name: "postgres_data"
+docker_compose_postgres_password: "petclinic"
+docker_compose_postgres_user: "petclinic"
+docker_compose_postgres_db: "petclinic"

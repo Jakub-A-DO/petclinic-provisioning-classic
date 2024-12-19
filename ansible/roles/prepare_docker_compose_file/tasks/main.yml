@@ -1,0 +1,28 @@
+---
+- name: Ensure directory exists
+  file:
+    path: "{{ app_path }}"
+    state: directory
+    mode: "0755"
+
+- name: Template docker-compose file
+  template:
+    src: templates/docker-compose.yml.j2
+    dest: "{{ app_path }}/docker-compose.yml"
+    mode: "0700"
+    force: yes
+
+- name: Copy nginx config file
+  copy:
+    src: files/default.conf
+    dest: "{{ app_path }}/default.yml"
+    mode: "0600"
+
+- name: Run docker-compose.yml file
+  community.docker.docker_compose_v2:
+    project_src: "{{ app_path }}"
+  register: output
+
+- name: Show results
+  debug:
+    var: output

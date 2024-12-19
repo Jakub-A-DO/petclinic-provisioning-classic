@@ -1,0 +1,47 @@
+---
+- name: Install docker
+  hosts: all
+  become: true
+  roles:
+    - prepare_docker
+
+- name: Provision monitoring
+  hosts: petclinic-monitoring
+  roles:
+    - prepare_and_start_monitoring
+
+- name: Provision postgresql master (using docker compose)
+  hosts: petclinic-db-master
+  roles:
+    - prepare_and_start_postgres_master_docker_compose
+
+- name: Provision postgresql standby (using docker compose)
+  hosts: petclinic-db-standby
+  roles:
+    - prepare_and_start_postgres_standby_docker_compose
+
+- name: Install monitoring on db nodes
+  hosts: petclinic-db-standby, petclinic-db-master
+  roles:
+    - install_monitoring_on_db
+
+- name: Install java and maven
+  hosts: petclinic
+  become: true
+  roles:
+    - install_java_and_maven
+
+- name: Download repo
+  hosts: petclinic
+  roles:
+    - download_petclinic_repo
+
+- name: Download petclinic dependency and prepare docker image
+  hosts: petclinic
+  roles:
+    - prepare_petclinic_image
+
+- name: Download petclinic dependency and start app
+  hosts: petclinic
+  roles:
+    - prepare_and_start_petclinic_docker_compose

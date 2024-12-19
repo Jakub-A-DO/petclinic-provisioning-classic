@@ -1,0 +1,12 @@
+docker_compose_network_name: "clinic"
+
+docker_compose_petclinic_image_name: "petclinic-ansible"
+docker_compose_petclinic_image_version: "v1"
+docker_compose_petclinic_external_port: "80"
+docker_compose_petclinic_internal_port: "8080"
+
+env_petclinic_postgres_pass: "{{ env_postgres_pass }}"
+env_petclinic_postgres_user: "{{ env_postgres_user }}"
+env_petclinic_postgres_db: "{{ env_postgres_db }}"
+env_petclinic_postgres_url: "jdbc:postgresql://{{ docker_compose_postgres_server_ip }}:5432/petclinic"
+env_petclinic_spring_active_profile: "postgres"

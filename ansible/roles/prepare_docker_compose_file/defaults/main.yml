@@ -1,0 +1,9 @@
+nginx_config_file_name: "./default.conf"
+docker_compose_nginx_image: "nginx:1.24"
+
+docker_compose_network_name: "monitoring"
+docker_compose_restart_policy: "always"
+
+docker_compose_node_exporter_image: "prom/node-exporter:v1.8.2"
+
+app_path: "/opt/monitoring-app"
