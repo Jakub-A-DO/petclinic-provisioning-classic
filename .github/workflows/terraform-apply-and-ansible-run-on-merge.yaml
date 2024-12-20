@@ -35,3 +35,32 @@ jobs:
         run: terraform init
       - name: Apply
         run: terraform apply -auto-approve
+      - uses: actions/upload-artifact@v4
+        with:
+          name: generated_inventory
+          path: ./gcp/inventory-dev.ini
+          retention-days: 1
+          overwrite: true
+
+  ansible_run:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ansible
+    needs: terraform_apply
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up SSH
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+      - run: ls -l private_key.pem
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated_inventory
+          path: ./ansible
+      - name: Run Ansible Playbook
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: False
+        run: |
+          ansible-playbook -i inventory-dev.ini playbooks/prepare-petclinic-nodes.yml --private-key private_key.pem
