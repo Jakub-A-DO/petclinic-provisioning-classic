@@ -142,6 +142,18 @@ variable "service_accounts_workload_project_roles" {
   ]
 }
 
+variable "service_accounts_workload_names_terraform" {
+  type    = list(string)
+  default = ["petclinic-tf"]
+}
+
+variable "service_accounts_workload_project_roles_terraform" {
+  type = list(string)
+  default = [
+    "petclinic-444616=>roles/iam.workloadIdentityUser", "petclinic-444616=>roles/editor", "petclinic-444616=>roles/storage.objectAdmin"
+  ]
+}
+
 variable "service_accounts_instance_names" {
   type    = list(string)
   default = ["instance-sa"]

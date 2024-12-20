@@ -18,6 +18,15 @@ module "service_accounts_workload" {
   project_roles = var.service_accounts_workload_project_roles
 }
 
+module "service_accounts_workload_terraform" {
+  source        = "terraform-google-modules/service-accounts/google"
+  version       = "~> 4.0"
+  project_id    = var.project
+  prefix        = var.service_accounts_workload_prefix
+  names         = var.service_accounts_workload_names_terraform
+  project_roles = var.service_accounts_workload_project_roles_terraform
+}
+
 module "service_accounts_monitoring" {
   source        = "terraform-google-modules/service-accounts/google"
   version       = "~> 4.0"

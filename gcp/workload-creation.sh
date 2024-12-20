@@ -13,6 +13,10 @@ gcloud iam workload-identity-pools create github-actions --location="global" --d
 
 gcloud iam workload-identity-pools providers create-oidc github-provider --location="global" --workload-identity-pool="github-actions" --display-name="Github Actions Provider" --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.aud=assertion.aud,attribute.repository=assertion.repository" --attribute-condition="assertion.repository_owner_id == \"192263822\" && attribute.repository == \"Jakub-A-DO/spring-petclinic-devops\" && assertion.ref == \"refs/heads/main\" && assertion.ref_type ==\"branch\" && assertion.actor == \"Jakub-A-DO\"" --issuer-uri="https://token.actions.githubusercontent.com"
 
+gcloud iam workload-identity-pools providers create-oidc github-provider-terraform-main --location="global" --workload-identity-pool="github-actions" --display-name="Github Actions Provider for Terraform" --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.aud=assertion.aud,attribute.repository=assertion.repository" --attribute-condition="assertion.repository_owner_id == \"192263822\" && attribute.repository == \"Jakub-A-DO/petclinic-provisioning-classic\" && assertion.ref == \"refs/heads/main\" && assertion.ref_type ==\"branch\" && assertion.actor == \"Jakub-A-DO\"" --issuer-uri="https://token.actions.githubusercontent.com"
+
+gcloud iam workload-identity-pools providers create-oidc github-provider-terraform-plan --location="global" --workload-identity-pool="github-actions" --display-name="Github Actions Terraform plan" --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.aud=assertion.aud,attribute.repository=assertion.repository" --attribute-condition="assertion.repository_owner_id == \"192263822\" && attribute.repository == \"Jakub-A-DO/petclinic-provisioning-classic\" && assertion.event_name == \"pull_request\"" --issuer-uri="https://token.actions.githubusercontent.com"
+
 POOL_NAME=$(gcloud iam workload-identity-pools describe $POOL_ID \                                    
     --project=$PROJECT_ID \
     --location="global" \
