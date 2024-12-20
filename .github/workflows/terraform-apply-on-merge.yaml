@@ -1,0 +1,37 @@
+name: Terraform apply on merge to main
+
+on:
+  push:
+    branches:
+      - main # Apply only on main
+
+env:
+  PROJECT_ID: "petclinic-444616"
+  SERVICE_ACCOUNT: "github-actions-petclinic-tf@petclinic-444616.iam.gserviceaccount.com"
+  WORKLOAD_IDENTITY_PROVIDER: "projects/334892833978/locations/global/workloadIdentityPools/github-actions/providers/github-provider-terraform-main"
+
+jobs:
+  terraform_apply:
+    permissions:
+      contents: "write"
+      id-token: "write"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./gcp
+    steps:
+      - uses: actions/checkout@v4
+      - name: Google Auth
+        id: auth
+        uses: "google-github-actions/auth@v2"
+        with:
+          token_format: "access_token"
+          project_id: ${{ env.PROJECT_ID }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Initialize
+        run: terraform init
+      - name: Apply
+        run: terraform apply -auto-approve
