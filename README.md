@@ -48,3 +48,39 @@ Things I've added or changed:
 - Single node
 - Dynamic servers discovery using gce_sd_configs
 - Grafana preconfigured with datasources and dashboards
+
+## Architecture diagram
+
+<details>
+<summary>Click to expand</summary>
+
+TODO!
+
+</details>
+
+## Used GCP resources
+
+<details>
+<summary>Click to expand</summary>
+
+TODO!
+
+</details>
+
+## Things to add/improve
+
+<details>
+<summary>Click to expand</summary>
+
+TODO!
+
+</details>
+
+## Things ommited by purpose
+
+<details>
+<summary>Click to expand</summary>
+
+TODO!
+
+</details>
