@@ -1,21 +1,26 @@
-name: Java CI with Maven
+name: Terraform plan on pull request
 
 on:
   pull_request: # Trigger plan on pull requests
     branches:
       - "**" # From any branch
-  push:
-    branches:
-      - main # Apply only on main
 
 env:
   PROJECT_ID: "petclinic-444616"
-  SERVICE_ACCOUNT: "github-actions-petclinic-f@petclinic-444616.iam.gserviceaccount.com"
+  SERVICE_ACCOUNT: "github-actions-petclinic-tf@petclinic-444616.iam.gserviceaccount.com"
   WORKLOAD_IDENTITY_PROVIDER: "projects/334892833978/locations/global/workloadIdentityPools/github-actions/providers/github-provider-terraform-plan"
 
 jobs:
-  terraform_apply:
-    runs-on: ubuntu:latest
+  terraform_plan:
+    permissions:
+      contents: "write"
+      id-token: "write"
+      pull-requests: write
+      repository-projects: write
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./gcp
     steps:
       - uses: actions/checkout@v4
       - name: Google Auth
@@ -31,9 +36,12 @@ jobs:
       - name: Initialize
         run: terraform init
       - name: Plan
-        run: terraform plan -out .planfile
-      - name: Post PR comment
-        uses: borchero/terraform-plan-comment@v2
+        run: terraform plan --lock=false -out terraform.plan
+      - run: terraform show -json terraform.plan > terraform.json
+      - run: terraform show -no-color terraform.plan > terraform.text
+
+      - uses: ahmadnassri/action-terraform-report@v4
         with:
-          token: ${{ github.token }}
-          planfile: .planfile
+          terraform-json: ${{ github.workspace }}/gcp/terraform.json
+          terraform-text: ${{ github.workspace }}/gcp/terraform.text
+          remove-stale-reports: true

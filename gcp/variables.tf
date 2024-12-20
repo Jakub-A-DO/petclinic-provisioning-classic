@@ -195,7 +195,7 @@ variable "monitoring_service_account_scope" {
 
 variable "autoscaler_min_replicas" {
   type    = number
-  default = 4
+  default = 3
 }
 
 variable "autoscaler_max_replicas" {
