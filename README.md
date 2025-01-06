@@ -65,7 +65,21 @@ Things I've added or changed:
 <details>
 <summary>Click to expand</summary>
 
-TODO!
+- Computer instances
+- Computer firewall
+- Compute region autoscaller
+- instance template
+- region compute instance group manager
+- backend service
+- health checks
+- global address
+- url map
+- target http proxy
+- global forwarding rules
+- artifact registry
+- service accounts
+- storage bucket
+- workloads
 
 </details>
 

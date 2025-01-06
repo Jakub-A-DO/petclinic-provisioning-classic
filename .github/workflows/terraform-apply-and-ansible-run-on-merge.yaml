@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main # Apply only on main
+    paths:
+      - 'gcp/**'
+      - 'ansible/**'
 
 env:
   PROJECT_ID: "petclinic-444616"
