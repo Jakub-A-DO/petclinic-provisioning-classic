@@ -54,7 +54,9 @@ Things I've added or changed:
 <details>
 <summary>Click to expand</summary>
 
-TODO!
+### Simple arch diagram to show system design (details ommited, they are described in code)
+
+![Arch](./pictures/arch-petclinic-standard.png)
 
 </details>
 
