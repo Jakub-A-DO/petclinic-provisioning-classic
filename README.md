@@ -26,7 +26,7 @@ Things I've added or changed:
 
 ### APP
 
-- Autoscaling group, provisioned with startup-script.sh (3-6 servers)
+- Autoscaling group, provisioned with startup-script.sh (3-6 servers in different zones)
 - Containers are auto-updated using [watchtower](https://github.com/containrrr/watchtower)
 - autohealing enabled (based on healthchecks)
 - Load balancer before app servers
@@ -89,7 +89,9 @@ Things I've added or changed:
 <details>
 <summary>Click to expand</summary>
 
-TODO!
+- alerts in grafana (or alert manager)
+- bastion host for access to private network for ansible, would limit public access and public ip wouldn't be needed for some resources
+- separated environments (dev, test, prod) - optional
 
 </details>
 
@@ -98,6 +100,12 @@ TODO!
 <details>
 <summary>Click to expand</summary>
 
-TODO!
+- db failover, quite complicated and can be resolved using gcp managed service (didn't use it because of cost)
+- db backups - quite trivial - cron or systemd service with timer + upload to db (would be also resolved with Cloud SQL)
+- monitoring in ha - simple solution would be to add another instances of grafana (stateless) and multiple instances of prometheus. Data would be duplicated, but server/service failure won't cause DOS. This problem is much better resolved on K8s.
+  Also public ips are limited to 8 per region for trial account - could be solved by add bastion server as jump proxy for ansible.
+- using default vpc - it's enough for this project
+- single env - currently enough
+- ssl - not needed for this project
 
 </details>
