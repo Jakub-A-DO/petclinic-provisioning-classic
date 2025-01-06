@@ -200,7 +200,7 @@ variable "autoscaler_min_replicas" {
 
 variable "autoscaler_max_replicas" {
   type    = number
-  default = 6
+  default = 3
 }
 
 variable "autoscaler_cooldown_period" {
