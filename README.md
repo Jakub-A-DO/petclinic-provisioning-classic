@@ -6,7 +6,7 @@ As an application, I'm using [forked-Petclinic](https://github.com/Jakub-A-DO/sp
 
 Project consists of 2 repositories:
 
-- App repository (linked before)
+- App repository (linked above)
 - Infra, gitops repository (this one)
 
 ## App repository
@@ -27,7 +27,8 @@ Things I've added or changed:
 ### APP
 
 - Autoscaling group, provisioned with startup-script.sh (3-6 servers)
-- autohealing enabled (checked by healthchecks)
+- Containers are auto-updated using [watchtower](https://github.com/containrrr/watchtower)
+- autohealing enabled (based on healthchecks)
 - Load balancer before app servers
 - App installed using docker compose
 - Promtail, Cadvisor and node-exporter installed

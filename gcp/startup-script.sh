@@ -4,7 +4,8 @@ echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" |
 gcloud auth configure-docker europe-central2-docker.pkg.dev <<< -y
 sudo apt update; sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 IMAGE=$(gcloud artifacts docker images list europe-central2-docker.pkg.dev/petclinic-444616/docker-image-registry/petclinic/  --include-tags --sort-by="~updateTime" --limit=1 --format='get(IMAGE)')
-TAG=$(gcloud artifacts docker images list europe-central2-docker.pkg.dev/petclinic-444616/docker-image-registry/petclinic/  --include-tags --sort-by="~updateTime" --limit=1 --format='get(TAGS)')
+TAG="latest"
+# TAG=$(gcloud artifacts docker images list europe-central2-docker.pkg.dev/petclinic-444616/docker-image-registry/petclinic/  --include-tags --sort-by="~updateTime" --limit=1 --format='get(TAGS)')
 DB_ADDRESS="${db_ip}"
 mkdir -p /home/bsc-node/petclinic/docker-compose
 APP_DOCKER_COMPOSE_FILE=$(curl -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/attributes/app_docker_compose)

@@ -1,6 +1,7 @@
 services:
   petclinic:
     image: ${IMAGE}:${TAG}
+    container_name: petclinic
     ports:
       - 80:8080
     environment:
@@ -10,3 +11,14 @@ services:
       - POSTGRES_URL=jdbc:postgresql://${DB_ADDRESS}:5432/petclinic
       - SPRING_PROFILES_ACTIVE=postgres
     restart: always
+  watchtower:
+    image: yspreen/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker/config.json:/config.json
+      - /root/.config/gcloud:/.config/gcloud
+      - /usr/lib/google-cloud-sdk:/usr/lib/google-cloud-sdk
+    command: --cleanup --interval 60 petclinic
+    environment:
+      - PATH=$PATH:/usr/lib/google-cloud-sdk/bin
+      - HOME=/
